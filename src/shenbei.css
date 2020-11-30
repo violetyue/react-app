@@ -1,0 +1,49 @@
+/* 圣杯布局 */
+@import '~antd/dist/antd.css';
+
+.container {
+  padding-left: 150px;
+  padding-right: 250px;;
+}
+
+.middle {
+  background-color: rgba(127, 255, 212, 0.63);
+  min-height: 100vh;
+  width: 100%;
+  float: left;
+}
+
+.left {
+  background-color: rgba(0, 60, 255, 0.233);
+  min-height: 100vh;
+  width: 150px;
+  float: left;
+  margin-left: -100%;
+  position: relative;
+  left: -150px;
+}
+
+.right {
+  background-color: rgba(165, 42, 42, 0.164);
+  min-height: 100vh;
+  width: 250px;
+  float: left;
+  margin-left: -250px;
+  position: relative;
+  right: -250px;
+}
+
+.inputarea {
+  padding: 5px;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+
+
+.tablearea {
+  padding: 5px;
+  margin: 10px;
+}
