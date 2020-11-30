@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Input, DatePicker, Button, Table, Select, Menu } from 'antd';
 import 'antd/dist/antd.css';
 
+const { SubMenu } = Menu;
+
 const { Column } = Table;
 const data = [
   {
@@ -75,6 +77,11 @@ class App1 extends Component {
               <Menu.Item key='m2'>
                 Option 2
               </Menu.Item>
+              <SubMenu key='subm1' title='Option 3'>
+                <Menu.Item key='m3'>Sub 1</Menu.Item>
+                <Menu.Item key='m4'>Sub 2</Menu.Item>
+                <Menu.Item key='m5'>Sub 3</Menu.Item>
+              </SubMenu>
             </Menu>
           </div>
           <div className='right'></div>
