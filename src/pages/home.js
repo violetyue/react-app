@@ -3,39 +3,79 @@ import React, { Component } from 'react';
 import { Input, DatePicker, Button, Table, Select, Menu } from 'antd';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import '../mock/index'
 
 const { SubMenu } = Menu;
 
-const { Column } = Table;
-const data = [
-  {
-    key: '1',
-    name: 'Alice',
-    period: '23/11/2020 - 25/11/2020',
-    location: 'Shanghai, China',
-    status: 'Finished',
-  },
-  {
-    key: '2',
-    name: 'Bob',
-    period: '23/11/2020 - 29/11/2020',
-    location: 'Melbourne, Australia',
-    status: 'Processing',
-  },
-  {
-    key: '3',
-    name: 'Jack',
-    period: '1/12/2020 - 6/12/2020',
-    location: 'Canberra, Australia',
-    status: 'Not start',
-  },
-];
+// const { Column } = Table;
+// const data = [
+//   {
+//     key: '1',
+//     name: 'Alice',
+//     period: '23/11/2020 - 25/11/2020',
+//     location: 'Shanghai, China',
+//     status: 'Finished',
+//   },
+//   {
+//     key: '2',
+//     name: 'Bob',
+//     period: '23/11/2020 - 29/11/2020',
+//     location: 'Melbourne, Australia',
+//     status: 'Processing',
+//   },
+//   {
+//     key: '3',
+//     name: 'Jack',
+//     period: '1/12/2020 - 6/12/2020',
+//     location: 'Canberra, Australia',
+//     status: 'Not start',
+//   },
+// ];
 
 const { Option } = Select;
 
 class home extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      columns: [{
+        title: 'Title',
+        dataIndex: 'title',
+      }, {
+        title: 'Price',
+        dataIndex: 'price',
+      }],
+      data: []
+    }
+  }
+
+  getData = () => {
+    axios.get('http://v.juhe.cn/toutiao/index?type=top&key=d85a6d287c10182f16ceebc6a744e231')
+    .then((response)=>{
+      this.setState({
+        data: response.data
+      })
+    })
+    .catch(error=>{
+      console.log(error);
+    })
+  }
   
+  showData = () => {
+    axios({
+        url:"/infor",
+        method:"get"
+    }).then((ok)=>{
+        this.setState({
+          data: ok.data
+        })
+    })
+  }
+
   render() { 
+    let data = this.state.data
+    let columns = this.state.columns
     return (
       <div className='container'>
           <div className='middle'>
@@ -61,13 +101,10 @@ class home extends Component {
               </div>
             </div>
             <div className='tablearea'>
-              <Table dataSource={data}>
-                <Column title='Name' dataIndex='name' key='name' />
-                <Column title='Period' dataIndex='period' key='period' />
-                <Column title='Location' dataIndex='location' key='location' />
-                <Column title='Status' dataIndex='status' key='status' />
-                <Column title='Action' key='action' render={() => (<a>Delete</a>)} />
-              </Table>
+              <Button onClick={this.showData.bind(this)}>Show</Button>
+              {
+                <Table columns={columns} dataSource={data} />
+              }
             </div>
           </div>
           <div className='left'>
