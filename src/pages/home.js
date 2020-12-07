@@ -1,9 +1,11 @@
 import './shenbei.css';
 import React, { Component } from 'react';
-import { Input, DatePicker, Button, Table, Select } from 'antd';
+import { Input, DatePicker, Button, Table, Select, Modal, Form } from 'antd';
 import 'antd/dist/antd.css';
 import '../mock/index'
 import Mock from 'mockjs';
+import { formatCountdown } from 'antd/lib/statistic/utils';
+import FormItem from 'antd/lib/form/FormItem';
 const Random = Mock.Random;
 
 const { Option } = Select;
@@ -27,7 +29,12 @@ class home extends Component {
       inputTitle: '',
       inputPrice: '',
       data: [],
+      modalAddInfoVisible: false,
     }
+  }
+
+  openModalAddInfo = (type)=>{
+    this.setState({modalAddInfoVisible: true})
   }
 
   componentDidMount() {
@@ -98,9 +105,12 @@ class home extends Component {
     })
   }
 
+  
+
   render() { 
     let data = this.state.data
     let columns = this.state.columns
+    
     return (
       <div>
             <div className='inputarea'>
@@ -125,15 +135,49 @@ class home extends Component {
               </div>  
             </div>
             <div className='addarea'>
-                <div className='inputTitle'>
-                  <label htmlFor='input title'>Title: </label>
-                  <Input style={{ width: '30%' }} value={this.state.inputTitle} onChange={this.titleInput.bind(this)}/>
-                </div>
-                <div className='inputPrice'>
-                  <label htmlFor='input price'>Price: </label>
-                  <Input style={{ width: '30%' }} value={this.state.inputPrice} onChange={this.priceInput.bind(this)}/>
-                </div>
-                <Button onClick={this.addItem.bind(this)}>Input</Button>
+              <Button
+                onClick={()=>this.openModalAddInfo("modalAddInfo")}
+              >
+              Input here
+              </Button>
+              <Modal 
+                visible={this.state.modalAddInfoVisible} 
+                title="Input item" 
+                cancelText="Cancel" 
+                onCancel={()=>{this.setState({modalAddInfoVisible: false})}}
+                okText="Input" 
+                onOk={()=>{
+                    this.addItem.bind(this);
+                    this.setState({modalAddInfoVisible: false});
+                }}
+              >
+                <Form>
+                  <FormItem 
+                    name='titlearea'
+                    label='Title: '
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Title is required!',
+                      },
+                     ]}
+                  >
+                  <Input value={this.state.inputTitle} onChange={this.titleInput.bind(this)}/>
+                  </FormItem>
+                  <FormItem
+                    name='pricearea'
+                    label='Price: '
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Price is required!',
+                      },
+                    ]}
+                  >
+                  <Input value={this.state.inputPrice} onChange={this.priceInput.bind(this)}/>
+                  </FormItem>
+                </Form>    
+              </Modal>
             </div>
             <div className='tablearea'>
               <Button onClick={this.addItem.bind(this)}>Add</Button>
