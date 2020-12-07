@@ -105,7 +105,19 @@ class home extends Component {
     })
   }
 
-  
+  handleOk=e=>{
+    this.formRef.current.validateFields()
+            .then(values => {
+                this.formRef.current.resetFields();
+                this.addItem(this);
+                this.setState({modalAddInfoVisible: false});
+            })
+            .catch(info=>{
+              console.log('Validate failed:', info);
+            })
+  }
+
+  formRef = React.createRef();
 
   render() { 
     let data = this.state.data
@@ -146,12 +158,9 @@ class home extends Component {
                 cancelText="Cancel" 
                 onCancel={()=>{this.setState({modalAddInfoVisible: false})}}
                 okText="Input" 
-                onOk={()=>{
-                    this.addItem.bind(this);
-                    this.setState({modalAddInfoVisible: false});
-                }}
+                onOk={this.handleOk}
               >
-                <Form>
+                <Form ref={this.formRef} name='input-ref'>
                   <FormItem 
                     name='titlearea'
                     label='Title: '
