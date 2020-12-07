@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Input, DatePicker, Button, Table, Select } from 'antd';
 import 'antd/dist/antd.css';
 import '../mock/index'
+import Mock from 'mockjs';
+const Random = Mock.Random;
 
 const { Option } = Select;
 
@@ -20,46 +22,80 @@ class home extends Component {
         title: 'Action',
         dataIndex: 'delete',
         key: 'delete',
-        render: (text,record,index) => <div data-index={index} onClick={this.deleteItem.bind(this,text,record,index)}>Delete</div>
+        render: (text,record,index) => <a data-index={index} onClick={this.deleteItem.bind(this,text,record,index)}>Delete</a>
       }],
+      inputTitle: '',
+      inputPrice: '',
       data: [],
-      list: [
-        {"key":"1","title":"第二件半价！日系爆款5双装纯棉中筒袜","price":18.9},
-        {"key":"2","title":"【啄木鸟】加绒加厚针织衫毛衣","price":59},
-        {"key":"3","title":"爆款！滋色联名大英博物馆埃及限量款蜜粉饼","price":49.9},
-        {"key":"4","title":"冬季爆款！新款加厚羊羔毛羽绒棉服女","price":69},
-        {"key":"5","title":"【拍3件】156颗立白洗衣凝珠","price":94},
-        {"key":"6","title":"【李子柒】桂花坚果藕粉羹350g","price":49.7}
-      ]
     }
   }
 
-  
+  componentDidMount() {
+    //页面加载时就调用查询
+    this.showData()
+  }
+
+
   showData = () => {
-    
-    const data = JSON.parse(localStorage.list);
-    console.log(localStorage.list)
-    this.setState({data})
+    const list = localStorage.list;
+    if (list) {
+      //判断是否存在list，localStorage
+      const data = JSON.parse(localStorage.list);
+      this.setState({data})
+    }
   }
 
   saveItem = () => {
     const {data} = this.state;
+    //localStorage中的值是按照字符保存的，所以每次需要用JSON.stringify及JSON.parse转换
     localStorage.list = JSON.stringify(data);
   }
 
   addItem = () => {
-    const data = JSON.parse(localStorage.list)
+    // const data = JSON.parse(localStorage.list)
+    //因为state中的数据和localStorage的数据是一致的这里，我们就偷懒使用state中的data
+    const {data} = this.state;
     let arr = data.slice(0)
-    let newItem = {"key":"10","title":"this is the new item","price":40}
+    //使用makeNewItem来生成新的数据
+    let newItem = this.makeNewItem()
     arr.push(newItem)
     this.setState({data:arr}, ()=>{this.saveItem()})
   }
 
-  deleteItem = () => {
-    const data = JSON.parse(localStorage.list)
+  makeNewItem = () => {
+    const { data } = this.state;
+    //生成唯一的key
+    let lastKey = 1;
+    if (data.length){
+      lastKey = data[data.length - 1].key
+    }
+    let newItem = {}
+    newItem.key = lastKey + 1;
+    newItem.title = this.state.inputTitle
+    newItem.price = this.state.inputPrice
+    return newItem
+  }
+  deleteItem = (text, record, index) => {
+    //这里是配置项中我们传入的参数，其中index我们就直接可以在splice中使用
+    console.log(text, record, index)
+    // const data = JSON.parse(localStorage.list)
+    //因为state中的数据和localStorage的数据是一致的这里，我们就偷懒使用state中的data
+    const {data} = this.state;
     let arr = data.slice(0)
-    arr.splice(('data-index'),1)
+    arr.splice(index,1)
+    //数组slice和splice语法再掌握一下
     this.setState({data:arr}, ()=>{this.saveItem()})
+  }
+
+  titleInput(e) {
+    this.setState({
+      inputTitle: e.target.value,
+    })
+  }
+  priceInput(e) {
+    this.setState({
+      inputPrice: e.target.value,
+    })
   }
 
   render() { 
@@ -86,7 +122,18 @@ class home extends Component {
               </div>
               <div className='buttonarea'>
                 <Button>Submit</Button>
-              </div>
+              </div>  
+            </div>
+            <div className='addarea'>
+                <div className='inputTitle'>
+                  <label htmlFor='input title'>Title: </label>
+                  <Input style={{ width: '30%' }} value={this.state.inputTitle} onChange={this.titleInput.bind(this)}/>
+                </div>
+                <div className='inputPrice'>
+                  <label htmlFor='input price'>Price: </label>
+                  <Input style={{ width: '30%' }} value={this.state.inputPrice} onChange={this.priceInput.bind(this)}/>
+                </div>
+                <Button onClick={this.addItem.bind(this)}>Input</Button>
             </div>
             <div className='tablearea'>
               <Button onClick={this.addItem.bind(this)}>Add</Button>
