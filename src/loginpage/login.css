@@ -1,0 +1,19 @@
+.loginarea {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 255, 242, 0.247);
+}
+
+.login-form {
+    
+    width: 480px;
+    height: 260px;
+}
+
+.login-button {
+    position: relative;
+    left: 45%;
+    
+}

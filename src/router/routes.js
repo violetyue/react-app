@@ -2,6 +2,7 @@ import device from "../pages/device";
 import home from "../pages/home";
 import order from "../pages/order";
 import person from "../pages/person";
+import login from "../loginpage/login";
 
 
 export const mainRoutes = [{
@@ -17,3 +18,10 @@ export const mainRoutes = [{
     path: "/pages/home",
     component: home
 }]
+
+export const loginRoutes = [
+    {
+        path: "/loginpage/login",
+        component: login
+    }
+]
